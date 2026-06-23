@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Residentes - Administración</title>
+    <style>
+        :root { 
+            --primary: #2ecc71; 
+            --primary-hover: #27ae60;
+            --bg: #f5f7fa; 
+            --text: #2c3e50; 
+            --card-bg: #ffffff;
+            --border: #dcdde1;
+            --danger: #e74c3c;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px; 
+            box-sizing: border-box;
+            color: var(--text);
+        }
+        
+        .card { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            width: 100%; 
+            max-width: 550px; 
+        }
+        
+        h2 {
+            margin-top: 0;
+            color: var(--text);
+            font-size: 24px;
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7f8c8d;
+            margin: 20px 0 10px 0;
+            grid-column: span 2;
+            border-top: 1px dashed var(--border);
+            padding-top: 15px;
+        }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full { grid-column: span 2; }
+        
+        label { 
+            font-size: 0.85em; 
+            font-weight: 600;
+            color: #34495e; 
+            margin-bottom: 5px; 
+            display: block; 
+        }
+        
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border); 
+            box-sizing: border-box; 
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+        }
+        
+        button { 
+            background: var(--primary); 
+            color: white; 
+            font-weight: bold; 
+            font-size: 16px;
+            border: none; 
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer; 
+            margin-top: 25px; 
+            transition: background 0.3s ease, transform 0.1s ease; 
+            width: 100%;
+        }
+        
+        button:hover { background: var(--primary-hover); }
+        button:active { transform: scale(0.98); }
+        button:disabled { background: #bdc3c7; cursor: not-allowed; }
+
+        .btn-secundario {
+            background: #34495e;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .btn-secundario:hover { background: #2c3e50; }
+
+        .btn-eliminar {
+            background: var(--danger);
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-top: 5px;
+            width: auto;
+            float: right;
+        }
+        
+        .extra { 
+            display: none; 
+            background: #f8f9fa; 
+            padding: 12px; 
+            margin-top: -5px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary); 
+        }
+
+        .bloque-persona {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #34495e;
+            margin-bottom: 15px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🏢 Registro de Residente Sueña Toesca</h2>
+    <form id="formRegistro">
+        <div class="grid">
+            <div class="section-title" style="border:none; padding:0; margin:0;">Titular del Registro</div>
+            
+            <div class="full">
+                <label>Nombre Completo</label>
+                <input type="text" name="nombre" placeholder="Juan Pérez Rossi" required minlength="7">
+            </div>
+            
+            <div>
+                <label>RUT</label>
+                <input type="text" id="rut" name="rut" placeholder="12.345.678-9" required minlength="8" class="rut-validar">
+            </div>
+            
+            <div>
+                <label>N° Departamento</label>
+                <input type="text" name="departamento" placeholder="Ej: 1402" required minlength="2">
+            </div>
+            
+            <div>
+                <label>Fecha de Registro</label>
+                <input type="date" name="fecha" id="fechaHoy" required>
+            </div>
+            
+            <div>
+                <label>Teléfono de Contacto</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="+569 1234 5678" required minlength="12" class="tel-formato">
+            </div>
+            
+            <div class="full">
+                <label>Tipo de Residente</label>
+                <select name="tipo_usuario" required>
+                    <option value="" disabled selected>Seleccione una opción...</option>
+                    <option value="Propietario">Propietario</option>
+                    <option value="Arrendatario">Arrendatario</option>
+                </select>
+            </div>
+            
+            <div class="full">
+                <label>Correo Electrónico</label>
+                <input type="email" name="correo" placeholder="ejemplo@correo.com" required>
+            </div>
+
+            <div class="section-title">Personas Adicionales Co-habitantes</div>
+            <div id="contenedorPersonas" class="full"></div>
+            <button type="button" id="btnAgregarPersona" class="btn-secundario full">+ Agregar otra persona</button>
+
+            <div class="section-title">Bienes Adicionales</div>
+
+            <div>
+                <label>¿Posee Bodega?</label>
+                <select name="tiene_bodega" id="tiene_bodega" onchange="toggleCampo('dbod', 'num_bodega', this.value)" required>
+                    <option value="No">No</option>
+                    <option value="Sí">Sí</option>
+                </select>
+            </div>
+            <div id="dbod" class="extra full">
+                <label>Número de Bodega</label>
+                <input type="text" id="num_bodega" name="num_bodega" placeholder="Ej: B-42">
+            </div>
+
+            <div>
+                <label>¿Posee Estacionamiento?</label>
+                <select name="tiene_estacionamiento" id="tiene_estacionamiento" onchange="toggleCampo('dest', 'num_estacionamiento', this.value)" required>
+                    <option value="No">No</option>
+                    <option value="Sí">Sí</option>
+                </select>
+            </div>
+            <div id="dest" class="extra full">
+                <label>Número de Estacionamiento</label>
+                <input type="text" id="num_estacionamiento" name="num_estacionamiento" placeholder="Ej: E-10">
+            </div>
+
+            <div class="full">
+                <label>Adjuntar Documentación (Copia Contrato / Cédula - Máx 5MB)</label>
+                <input type="file" id="fileInput" accept="image/*,.pdf" required>
+            </div>
+        </div>
+        <button type="submit" id="btn">Finalizar y Guardar Registro</button>
+    </form>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz9CEpHkhm7uA9TMT0Lri_dQxwX1CMjguWlwPyX3f3La6WCwc6YohaVIk0FpwBR_L4UUQ/exec';
+
+    document.getElementById('fechaHoy').valueAsDate = new Date();
+
+    let contadorPersonas = 0;
+    document.getElementById('btnAgregarPersona').addEventListener('click', function() {
+        contadorPersonas++;
+        const contenedor = document.getElementById('contenedorPersonas');
+        
+        const div = document.createElement('div');
+        div.className = 'bloque-persona';
+        div.id = `persona_${contadorPersonas}`;
+        div.innerHTML = `
+            <button type="button" class="btn-eliminar" onclick="eliminarPersona(${contadorPersonas})">Eliminar x</button>
+            <label style="color:#34495e; font-weight:bold; margin-bottom:10px;">Ficha Persona Adicional #${contadorPersonas}</label>
+            <div style="display:grid; grid-template-columns: 1fr; gap:10px;">
+                <input type="text" placeholder="Nombre Completo" required class="p-nombre" minlength="7">
+                <input type="text" placeholder="RUT (12.345.678-9)" required class="p-rut rut-validar" minlength="8">
+                <input type="tel" placeholder="Teléfono" required class="p-telefono tel-formato" minlength="12">
+                <input type="email" placeholder="Correo Electrónico" required class="p-correo">
+            </div>
+        `;
+        contenedor.appendChild(div);
+        asignarEventosDinamicos(div);
+    });
+
+    function eliminarPersona(id) {
+        document.getElementById(`persona_${id}`).remove();
+    }
+
+    function asignarEventosDinamicos(elementoParent) {
+        const rutInput = elementoParent.querySelector('.rut-validar');
+        const telInput = elementoParent.querySelector('.tel-formato');
+        
+        rutInput.addEventListener('input', function(e) {
+            e.target.value = formatearRut(e.target.value);
+        });
+        telInput.addEventListener('focus', function(e) {
+            if(!e.target.value) e.target.value = '+569';
+        });
+    }
+
+    function toggleCampo(idContenedor, idInput, valor) {
+        const contenedor = document.getElementById(idContenedor);
+        const input = document.getElementById(idInput);
+        if (valor === 'Sí') {
+            contenedor.style.display = 'block';
+            input.required = true;
+        } else {
+            contenedor.style.display = 'none';
+            input.required = false;
+            input.value = '';
+        }
+    }
+
+    document.getElementById('telefono').addEventListener('focus', function(e) {
+        if(!e.target.value) e.target.value = '+569';
+    });
+    document.getElementById('rut').addEventListener('input', function(e) {
+        e.target.value = formatearRut(e.target.value);
+    });
+
+    function validarRUT(rut) {
+        if (!/^[0-9]+[-|‐][0-9kK]{1}$/.test(rut)) return false;
+        let tmp = rut.split('-');
+        let dv = tmp[1].toLowerCase();
+        let res = m11(tmp[0]);
+        return res == dv;
+    }
+    function m11(f) {
+        let s=0,m=2;
+        for(let i=f.length-1;i>=0;i--){s+=f.charAt(i)*m;if(m==7)m=2;else m++;}
+        let r=11-(s%11);
+        return r==11?'0':r==10?'k':r.toString();
+    }
+    function formatearRut(rut) {
+        let v = rut.replace(/\./g,'').replace('-','').replace(/^0+/,'');
+        if (v.length > 1) {
+            let inicio = v.substring(0, v.length-1);
+            let dv = v.substring(v.length-1);
+            let r = ""; let j=1;
+            for (let i=inicio.length-1;i>=0;i--) {
+                r=inicio.charAt(i)+r; if(j%3==0 && j<=inicio.length-1) r="."+r; j++;
+            }
+            return r+"-"+dv;
+        } return v;
+    }
+
+    document.getElementById('formRegistro').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn');
+        const fileInput = document.getElementById('fileInput');
+
+        const rutTitular = document.getElementById('rut');
+        if (!validarRUT(rutTitular.value.replace(/\./g,''))) {
+            alert("⚠️ El RUT del titular no es válido.");
+            rutTitular.focus();
+            return;
+        }
+
+        const bloquesPersonas = document.querySelectorAll('.bloque-persona');
+        let acompañantesTexto = [];
+        let rutsValidos = true;
+
+        bloquesPersonas.forEach((bloque, indice) => {
+            const nombre = bloque.querySelector('.p-nombre').value;
+            const rut = bloque.querySelector('.p-rut');
+            const telefono = bloque.querySelector('.p-telefono').value;
+            const correo = bloque.querySelector('.p-correo').value;
+
+            if (!validarRUT(rut.value.replace(/\./g,''))) {
+                alert(`⚠️ El RUT de la Persona Adicional #${indice + 1} no es válido.`);
+                rut.focus();
+                rutsValidos = false;
+                return;
+            }
+            acompañantesTexto.push(`[Persona ${indice+1}: ${nombre} | RUT: ${rut.value} | Tel: ${telefono} | Email: ${correo}]`);
+        });
+
+        if (!rutsValidos) return;
+
+        btn.disabled = true;
+        btn.innerText = "Procesando y Subiendo...";
+
+        const formData = new FormData(this);
+        formData.append('personas_adicionales', acompañantesTexto.join(' ; '));
+
+        const file = fileInput.files[0];
+        if (file) {
+            const maximoPeso = 5 * 1024 * 1024;
+            if(file.size > maximoPeso) {
+                alert("⚠️ El archivo supera los 5MB permitidos.");
+                btn.disabled = false;
+                btn.innerText = "Finalizar y Guardar Registro";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function() {
+                formData.append('archivo', reader.result.split(',')[1]);
+                formData.append('mimeType', file.type);
+                enviar(formData);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            enviar(formData);
+        }
+    });
+
+    function enviar(formData) {
+        const params = new URLSearchParams();
+        formData.forEach((v, k) => params.append(k, v));
+
+        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
+        .then(() => {
+            alert("✅ Registro procesado con éxito. Los datos y archivos han sido guardados.");
+            location.reload();
+        })
+        .catch(() => {
+            alert("❌ Error crítico de comunicación con el servidor.");
+            document.getElementById('btn').disabled = false;
+            document.getElementById('btn').innerText = "Finalizar y Guardar Registro";
+        });
+    }
+</script>
+
+</body>
+</html>
